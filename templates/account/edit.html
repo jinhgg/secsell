@@ -1,0 +1,23 @@
+{% extends 'seckill/base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block content %}
+ <div id="layer_content">
+    <div class="register-box  module-static" style="margin-top: 20px;">
+         <div class="register-title">
+            <span> <a href="{{url_for('edit')}}" target='_self'><h1>编辑个人信息</h1></a></span>
+            <span> <a href="" target='_self'><h1>修改密码</h1></a></span>
+            <span> <a href="{{url_for('orderlist')}}" target='_self'><h1>我的订单</h1></a></span>
+
+         </div>
+         <div class="static-form">
+            <form action="{{url_for('edit')}}" method="post" enctype="multipart/form-data">
+
+
+                <p><input type="submit" class="submit" value="保存"></p>
+            </form>
+        </div>
+   </div>
+  </div>
+{% endblock %}

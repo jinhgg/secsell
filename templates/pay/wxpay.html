@@ -1,0 +1,72 @@
+{% extends 'seckill/base.html' %}
+
+{% block title %}
+    <title>可锐秒杀- 微信支付  </title>
+{% endblock %}
+
+
+
+{% block content %}
+  <div class="pageContainer">
+    <div class="pay_title"> <span><img  src="/static/images/wx.png" /></span><span>{{buy_title}}</span></div>
+    <div class="panel panel-info">
+        <div class="deal-detail clearfix">
+            <span class="left-part"> 订单号：{{order_id}} &nbsp;&nbsp;金额：¥</small>{{pay_amount}}（元）</span>
+
+        </div>
+        <div class="pay-box">
+            <div class="panel-body">
+                <input type="hidden" id="oid" name="oid" value="{{order_id}}"/>
+                <img id="qrcode" class="center-block" src="{{ newresult_src }}" style="width: 200px;"/>
+
+                <p>请使用微信扫描二维码以完成支付</p>
+                <span class="red"><small class="red f20">支付金额：¥{{pay_amount}}（元）</small></span>
+            </div>
+        </div>
+    </div>
+   </div>
+</div>
+<script type="text/javascript">
+    var type="1";
+    $(function () {
+        var Ohref = window.location.href;
+        var arrhref = Ohref.split("&result_src=");
+        var result_src = arrhref[1]
+        $("#qrcode").attr("src", result_src);
+        setInterval("checkPayIsSuccess()", 3000)
+    })
+    //主动查询订单状态是否更新成功
+    function checkPayIsSuccess() {
+        var ajax_url = "/pay_check"
+        var data_bak = {
+            'order_id': $("#oid").val(),
+            'random': Math.random()
+        }
+        var ajx = $.ajax({
+            url: ajax_url,
+            data: data_bak,
+            type: 'get',
+            cache: false,
+            dataType: 'json',
+            success: function (data) {
+                if (data.status == "200") {
+                    type=data.type
+                    setTimeout("receive_result_to_href()", 1000)
+                }
+            }
+        })
+    }
+    function receive_result_to_href() {
+        if(type=="1"){
+
+            var oid=$("#oid").val();
+            var ajax_url="/paysuccessed?pay_type=1&order_id="+oid;
+            window.location.href=ajax_url
+        }
+        else{
+            layer.alert("不属于充值或购买订单!")
+        }
+    }
+
+</script>
+{% endblock %}

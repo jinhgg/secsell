@@ -1,0 +1,89 @@
+{% extends 'seckill/base.html' %}
+
+{% block content %}
+     <div class="page-wrap">
+          <div class="page">
+            <div class="slide">
+                <div class="time-container time-container-fixed" >
+                    <div class="time-wrap">
+                        <ul class="time" id="J_TimeNav" style="top: 0px;">
+                              {% for hours in hour_list %}
+                                <li>
+                                    <a href="javascript:void(0)" class="line " id="{{ hours.starthour }}" data-time="{{ hours.starthour }}">
+                                        <span class="time1">{{ hours.starthour }}:00</span>
+                                        <span class="time2">- {{ hours.endhour }}:00</span>
+                                        <i class="flex"></i>
+                                    </a>
+                                </li>
+                              {% endfor %}
+                          </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="list" id="J_HomeList" data-spm="">
+                <div class="group">
+                    <h3 class="hour-wrap   pm  pm-fixed" >
+                        <span class="hour"><i class="num"></i>开始秒杀</span>
+                    </h3>
+                    <div class="goods-wrap">
+                     {% if product_list %}
+                       {% for product in product_list %}
+                        <div class="goods hour_{{ product.startdatetime.hour }} ">
+                            <div class="img-wrap">
+                                <a class="img-link" href="{{ url_for('detail') }}?product_id={{ product.id }}" target="_blank">
+                                    <img class="img" src="/static/images/{{ product.image }}">
+                                    <div class="cover">
+                                    </div>
+                                </a>
+                            </div>
+                            <h4 class="title">
+                                <a class="title-link" href="{{ url_for('detail') }}?product_id={{ product.id }}" target="_blank">{{ product.title }}</a>
+                            </h4>
+                            <div class="price-wrap">
+                                <table class="price-table">
+                                    <tbody>
+                                    <tr><td class="price">秒杀价：</td><td>市场价：</td><td>折扣：</td></tr>
+                                    <tr>
+                                        <td class="price"><i class="money">￥</i><span class="sec-price">{{ product.price }}</span></td>
+                                        <td class="original"><i class="money">￥</i>{{ product.marketprice }}</td>
+                                        <td class="ratio">10.0折</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="link">
+                                <a class="buy" href="{{ url_for('detail') }}?product_id={{ product.id }}" target="_blank">立即秒杀</a>
+                                <a class="hd" href="{{ url_for('detail') }}?product_id={{ product.id }}" target="_blank">
+                                    <span class="name">开始时间</span>
+                                    <span class="look">{{ product.startdatetime }}</span>
+                                    <i class="arrow"></i><i class="arrow arrow2"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                      {% else %}
+                         <div class="list-none">
+                         </div>
+                      {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+     </div>
+
+    <script>
+
+    $(".line").bind('click',function(){
+      var id=$(this).attr('data-time');
+
+      $('.goods').css('display','none');
+      $('.hour_'+id).css('display','block');
+      $('.num').html(id+":00");
+      $(".line").removeClass("focus");
+      $("#"+id).addClass("focus");
+    });
+
+    </script>
+{% endblock %}

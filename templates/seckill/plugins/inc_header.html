@@ -1,0 +1,54 @@
+<div class="seckill-header">
+    <div class="logo">
+        <a href="http://www.careeru.cn" >
+            <img src="/static/images/logo.png" alt="" width="65">
+            <img src="/static/images/maosha.png" alt="" width="143">
+        </a>
+    </div>
+    <div class="search">
+        <form id="J_TBSearchForm"  class="market-search" method="GET" action="/search" >
+            <div class="search-wrap">
+                <div class="input-wrap">
+                        <div id="ks-component79" class="ks-combobox" >
+                            <div class="ks-combobox-input-wrap">
+                                <input  class="ks-combobox-input" value="" name="searchq">
+                                <label  style="display:block;" class="ks-combobox-placeholder">
+                                </label>
+                            </div>
+                        </div>
+                </div>
+                <input  type="submit" class="search-btn" ></in>
+            </div>
+            <!-- End .search-wrap -->
+        </form>
+    </div>
+    <div  class="userlogin">
+         {% if current_user.is_authenticated %}
+             <span id="navlogout"><a href="{{ url_for('logout') }}?next=/">注销</a></span>
+             <span id="navprofile">
+                 <a href="{{ url_for('edit') }}">{{ current_user.name }}
+                  <img class="j-nav-myimg" src="/static/images/avtar.jpg" alt="" style="">
+                 </a>
+             </span>
+         {% else %}
+              <span id="navregister"><a class="curegister" href="javascript:;">注册</a></span>
+              <span id="navlogin"><a class="ulogin" href="javascript:;" data-status="nologin">登录</a></span>
+         {% endif %}
+     </div>
+    <div class="skmu J_menu" >
+            <div class="skmu_list">
+                <ul class="skmu_list_cnt">
+                    <li class="skmu_list_item skmu_list_item_on"><a href="/" title="" >首页</a></li>
+                     {% for cate in category_list %}
+                         <li class="skmu_list_item "><a href="{{ url_for('category') }}?cateid={{cate.id}}" >{{cate.name}}</a></li>
+                     {% endfor %}
+                </ul>
+            </div>
+    </div>
+</div>
+ <div class="banner">
+        <div class="left">
+            <div class="right"></div>
+        </div>
+ </div>
+

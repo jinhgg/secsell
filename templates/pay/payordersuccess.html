@@ -1,0 +1,36 @@
+{% extends 'seckill/base.html' %}
+{% block title %}
+    <title>可锐秒杀- 支付成功  </title>
+{% endblock %}
+{% block content %}
+<div style="background:rgba(210,210,210,0.3);">
+    <div class="container">
+        <div class="row">
+            <ul id="progressbar" style="z-index:99px;">
+                <li class="active">提交订单</li>
+                <li class="active">确认订单</li>
+                <li class="active">选择支付方式</li>
+                <li class="active">支付</li>
+                <li class="active focus">支付成功</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="container" style="padding-top:20px;">
+
+        <div class="panel panel-info">
+            <div class="panel-heading ">已完成支付<span class="pull-right"> 订单号：{{order_id}}</span></div>
+            <div class="panel-body">
+                <h1 class="green text-center"><i class="fa fa-check-circle fa-4x "></i></h1>
+                <p class="text-center">支付成功<br/>本次购买的商品是:{{msg}}</p>
+                <hr class="dashed"/>
+
+            </div>
+        </div>
+
+</div>
+<a href="#" id="back-to-top" data-toggle="tooltip" data-placement="left" title="返回顶部" style="display:block;">
+    <i class="fa fa-angle-up fa-2x"></i>
+</a>
+
+{% endblock %}

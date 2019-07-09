@@ -1,0 +1,139 @@
+{% extends 'seckill/base.html' %}
+
+{% block title %}
+    <title>可锐秒杀- 支付  </title>
+{% endblock %}
+
+
+{% block content %}
+<div class="pageContainer" >
+    <input type="hidden" id="order_id" value="{{order.id}}" />
+    <input type="hidden" id="user_id" value="{{current_user.id}}" />
+    <input type="hidden" id="payable_amount" value="{{order.amount}}" />
+    <div class="pay_title">我的购买订单</div>
+    <div class="deal-detail clearfix">
+                    <div class="left-part">
+                        <div class="f16">
+                            	<span>订单号：{{order.id}}</span>
+                        </div>
+                        <div class="f12 mt15">
+                            <span>总金额：¥{{order.amount}}</span>
+
+                        </div>
+                    </div>
+                    <div class="right-part" style="width:455px">
+                        <div class="f16 tr">订单金额：<span class="f20 c_f60">{{order.amount}}</span>元</div>
+
+                    </div>
+
+    </div>
+    <div class="choice_title ">选择支付方式</div>
+    <div class="pay-box" id="payChoices">
+        <div class="panel-body">
+            <div class="pay-item clearfix">
+               <ul class="selectBankBox clearfix">
+                   <li>
+                        <input type="radio" name="pay_type" value="1" checked="checked" id="wxzf">
+                        <img src="/static/images/wxzf.png" class="pay_img mt20"/>
+                   </li>
+
+               </ul>
+            </div>
+
+            <div class="f-fl">
+                <a  href="javascript:void(0);" onclick="doPay()" class="paybutton f16" data-toggle="modal"  data-target=".bs-example-modal-sm">立即支付</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+
+        var csrftoken = $('meta[name=csrf-token]').attr('content')
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        //选择支付方式
+        function doPay() {
+            var this_obj=$(this);
+            this_obj.removeClass("button-primary").addClass("button-cancel").attr("disabled","disabled")
+            var pay_type = checkradio();
+            var order_id = $("#order_id").val();
+            var amount = $("#payable_amount").val();
+            var ajax_url = "/paying";
+            var data_post = {
+
+                'order_id': order_id,
+                'pay_type': pay_type,
+                'pay_amount':amount
+            }
+            var ajax = $.ajax({
+                url: ajax_url,
+                data: data_post,
+                type: 'post',
+                cache: false,
+                async : false,
+                dataType: 'json',
+                success: function (data) {
+                    this_obj.removeClass("button-cancel").addClass("button-primary").removeAttr("disabled")
+                    if (data.result == "success") {
+                        //window.location.href = data.hurl
+                        var el = document.createElement("a");
+                        document.body.appendChild(el);
+                        el.href = data.url; //url 是你得到的连接
+                        //el.target = '_new'; //指定在新窗口打开
+                        el.click();
+                        document.body.removeChild(el);
+                    }
+                    else if(data.result=="warning"){
+                        window.location.href=data.url;
+                    }
+                    else {
+                        alert(data.msg);
+                    }
+                },
+                error: function (data) {
+                    this_obj.removeClass("button-cancel").addClass("button-primary").removeAttr("disabled");
+                    alert('支付失败!')
+                }
+            })
+        }
+        function closeDialog(){
+            $('#pay_dialog').modal('hide');
+        }
+         //检查单选按钮选中的值
+        function checkradio() {
+            var item = $(":radio:checked");
+            var len = item.length;
+            if (len > 0) {
+                return $(":radio:checked").val();
+            }
+            else {
+                alert ("请选择支付方式");
+            }
+        }
+
+        function getResult(){
+            //不管点了支付成功还是支付失败,都去数据库根据实际数据查询
+            var oid=$("#order_id").val();
+            var ajax_url="";
+            window.location.href=ajax_url
+        }
+
+        function pay(){
+               $('pay-form').submit();
+            }
+
+    </script>
+{% endblock %}

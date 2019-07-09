@@ -1,0 +1,82 @@
+{% extends 'seckill/base.html' %}
+{% load static %}
+{% load dictfilter %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="mr-10"></div>
+    <div class="breadcrumb-container" >
+			<div class="">
+				<div class="register-title">
+					 <span> <a href="{% url 'edit' %}" target='_self'><h1>编辑个人信息</h1></a></span>
+                     <span> <a href="{% url 'password_change' %} "target='_self'><h1>修改密码</h1></a></span>
+                     <span> <a href="{% url 'orderlist' %} "target='_self'><h1>我的订单</h1></a></span>
+                     {% if request.user.is_superuser %}
+                        <span> <a href="{% url 'seckillproduct_list' %} "target='_self'><h1>秒杀商品列表</h1></a></span>
+				     {% endif %}
+				</div>
+			</div>
+	</div>
+    <div class="container">
+        <div class="order-info">
+            <h3 class="register-title">秒杀商品列表</h3>
+            <span><a class="btninit" href="{% url 'initstock' %}">初始化库存</a></span>
+          {% if request.user.is_superuser %}
+            <table class="tbl-cart">
+						<thead>
+							<tr>
+                                <th style="width: 10%;"></th>
+                                <th >商品ID</th>
+                                <th>状态</th>
+								<th>商品名称</th>
+                                <th >价格</th>
+								<th style="width: 6%;">初始库存</th>
+								<th style="width: 6%;">剩余库存</th>
+								<th  style="width: 15%;">开始时间</th>
+								<th  style="width: 15%;">结束时间</th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for pro in product_list %}
+						        	<tr>
+                                        <td class="prid">
+
+                                         <a class="seckill" href="{% url 'endseckill' %}?productid={{ pro.id }}">结束秒杀</a>
+                                        </td>
+                                       <td class="prid">
+                                         {{ pro.id }}
+                                        </td>
+                                        <td>
+                                           {{ pro.status }}
+                                        </td>
+                                        <td>
+                                            <a class="entry-title" href="">{{ pro.title }}</a>
+                                        </td>
+                                        <td><span class="unit-price">{{ pro.price }}</span></td>
+                                        <td>
+                                           {{ pro.stock_total }}
+                                        </td>
+                                        <td>
+                                        {% for stock in stock_list %}
+                                             {% ifequal stock|key:"id" pro.id %}
+                                                   {{ stock|key:"stock_qty"}}
+                                             {% endifequal %}
+                                        {% endfor %}
+                                         </td>
+                                        <td class="hidden-xs"><strong class="text-bold row-total">
+                                            {{ pro.startdatetime| date:'Y-m-d h:i' }}</strong>
+                                        </td>
+                                        <td class="hidden-xs">
+                                           {{ pro.enddatetime| date:'Y-m-d h:i' }}
+                                        </td>
+							        </tr>
+
+                             {% endfor %}
+						</tbody>
+					</table>
+          {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

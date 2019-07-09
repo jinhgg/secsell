@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{{ SITE_NAME }}</title>
+<meta name="keywords" content="{{ SITE_NAME }}" />
+<meta name="description" content="{{ SITE_DESC }}" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
+ {% include 'seckill/plugins/inc_styles.html' %}
+ {% block extra_header %}{% endblock %}
+ {% block title %}{% endblock %}
+</head>
+<body >
+      {% include 'seckill/plugins/inc_header.html' %}
+      {% block ad %}{% endblock %}
+      <div id="content" class="seckill-home" >
+           {% block content %}{% endblock %}
+      </div>
+
+      {% block custom_js %}{% endblock %}
+      <!-- 加载登录弹出页面 -->
+      {%include 'account/loginlayer.html' %}
+<footer>
+ {% include 'seckill/plugins/inc_footer.html' %}
+</footer>
+</body>
+</html>

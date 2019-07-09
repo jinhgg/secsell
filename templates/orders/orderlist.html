@@ -1,0 +1,60 @@
+{% extends 'seckill/base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+    <div class="mr-10"></div>
+    <div class="breadcrumb-container" >
+			<div class="">
+				<div class="register-title">
+                <span> <a href="{{url_for('edit')}}" target='_self'><h1>编辑个人信息</h1></a></span>
+                <span> <a href="" target='_self'><h1>修改密码</h1></a></span>
+                <span> <a href="{{url_for('orderlist')}}" target='_self'><h1>我的订单</h1></a></span>
+                </div>
+			</div>
+	</div>
+    <div class="container">
+        <div class="order-info">
+            <h3 class="register-title">我的订单信息</h3>
+            <table class="tbl-cart">
+						<thead>
+							<tr>
+                                <th style="width: 8%;">订单号</th>
+                                <th style="width: 8%;">用户</th>
+								<th>价格</th>
+								<th style="width: 8%;">数量</th>
+								<th  style="width: 8%;">订单时间</th>
+								<th  style="width: 10%;"></th>
+							</tr>
+						</thead>
+						<tbody>
+                            {% for item in orderlist %}
+
+                                        <td>
+                                           {{ item.id }}
+                                        </td>
+
+                                        <td>
+                                            <a class="entry-thumbnail" href="" data-toggle="lightbox">
+                                                <img src="" alt="" />
+                                            </a>
+                                            <a class="entry-title" href="">{{ item.name }}</a>
+                                        </td>
+                                        <td><span class="unit-price">{{ item.amount }}</span></td>
+                                        <td>
+                                           {{ item.quantity }}
+                                        </td>
+                                        <td class="hidden-xs"><strong class="text-bold row-total">{{ item.get_cost }}</strong></td>
+                                        <td >
+                                            {{ item.created }}
+                                        </td>
+							        </tr>
+
+                             {% endfor %}
+						</tbody>
+					</table>
+
+        </div>
+
+    </div>
+
+{% endblock %}

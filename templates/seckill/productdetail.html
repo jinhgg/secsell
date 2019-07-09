@@ -1,0 +1,411 @@
+{% extends 'seckill/base.html' %}
+{% block content %}
+
+
+    <div id="detail">
+        <div class="tb-detail-bd tb-clear">
+            <div class="tb-summary tb-clear">
+                <div class="tb-item-info tb-clear">
+                    <div class="tb-item-info-l">
+                        <div class="tb-gallery">
+                            <div class="tb-booth tb-pic tb-main-pic">
+                                <a href="" rel="nofollow" target="_blank">
+                                    <span class="ks-imagezoom-wrap">
+                                        <img id="J_ImgBooth" src="/static/images/{{ product_detail.image }}">
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                        <div id="J_Social" data-spm="" class="tb-social tb-clearfix">
+                            <ul>
+                                <li class="tb-social-fav">
+                                    <a data-spm-click="" class="J_TDialogTrigger" href=" ">
+                                        <i class="tb-icon"></i> 收藏宝贝<em class="J_FavCount"></em>
+                                    </a>
+                                </li>
+                                <li class="tb-social-split"></li>
+                                <li class="tb-social-share">
+                                    <a data-spm-click="" class="J_Share" href="javascript:;">
+                                        <i class="tb-icon"></i> 分享
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="tb-item-info-r" data-spm="iteminfo">
+                        <div class="tb-property tb-property-x">
+                            <div class="tb-wrap tb-wrap-newshop">
+                                <div id="J_Title" class="tb-title">
+                                    <h3 class="tb-main-title" data-title="{{ product_detail.title }}">
+                                        {{ product_detail.title }}
+                                    </h3>
+                                </div>
+                                <div id="J_Banner" class="tb-banner"></div>
+                                <ul class="tb-meta">
+                                    <li id="J_StrPriceModBox" class="tb-detail-price tb-clear J_PriceItem">
+                                        <span class="tb-property-type">价格</span>
+                                        <div class="tb-property-cont">
+                                            <strong id="J_StrPrice"
+                                                    style="font-size: 14px; color: rgb(60, 60, 60); font-weight: 400; text-decoration: line-through;"><em
+                                                    class="tb-rmb">¥</em>
+                                                <em class="tb-rmb-num">{{ product_detail.marketprice }}</em></strong>
+                                        </div>
+                                    </li>
+                                    <li id="J_Duty"></li>
+                                    <li class="tb-detail-price tb-ms-price tb-clearfix"><span class="tb-property-type">秒杀价</span>
+                                        <div class="tb-property-cont">
+                                            <em class="tb-rmb">¥</em>
+                                            <em id="saleprice"
+                                                data-price={{ product_detail.price }} class="tb-rmb-num">{{ product_detail.price }}</em>
+                                        </div>
+                                    </li>
+                                    <li id="J_Counter" class="tb-counter">
+                                        <div class="tb-counter-bd">
+                                            <div class="tb-sell-counter">
+                                                <a href="javascript:;" title="">
+                                                    <strong id="J_SellCounter" class="tb-zero">0</strong>
+                                                    <span>交易成功</span>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li id="J_MorePromoSlider" class="tb-more-promo-slider tb-clearfix"
+                                        style="display: none">
+                                        <ul id="J_MorePromoList"></ul>
+                                        <div class="post-script">以上价格可在付款时选择享用</div>
+                                    </li>
+                                </ul>
+                                <div class="tb-logistic tb-ms-logistic tb-clearfix">
+                                    <span class="tb-name tb-property-type">配送</span>
+                                    <div class="tb-logistic-info">卖家承担运费</div>
+                                </div>
+
+                                <div id="J_SepLine" class="sep-line" style="border-bottom: medium none;"></div>
+
+                                <div id="J_isku" class="tb-key tb-key-sku">
+                                    <div class="tb-skin">
+                                        <dl class="tb-amount tb-clear">
+                                            <dt class="tb-property-type">秒杀数量</dt>
+                                            <input id="product_id" type="hidden" value="{{ product_detail.id }}">
+                                            <dd>
+                                                            <span class="tb-stock" id="J_Stock">
+                                                            <a href="javascript:void(0);" title="减1" hidefocus=""
+                                                               class="tb-reduce J_Reduce tb-iconfont tb-disable-reduce">-</a>
+                                                            <input id="J_IptAmount" class="tb-text" value="1"
+                                                                   maxlength="8" title="请输入购买量" type="text">
+                                                            <a href="javascript:void(0);" hidefocus=""
+                                                               class="tb-increase J_Increase tb-iconfont tb-disable-increase"
+                                                               title="加1">+</a>件
+                                                            </span>
+                                                <em>(共<span id='stockqty'
+                                                            class="tb-count">{{ stock_qty }}</span>件，限<span
+                                                        class="tb-limit">1</span>件)</em>
+                                            </dd>
+                                        </dl>
+
+                                    </div>
+                                </div>
+
+                                {% if  isexpire %}
+                                    <div class="tb-sk-btns">
+                                        <a id="expire-button" href="#" class="sk-button m-l150">已过期失效</a>
+                                    </div>
+                                {% else %}
+                                    {% if  isbegin %}
+                                        {% if  hasstockqty %}
+                                            <div id="J_SecKill" class="sec-kill">
+                                                {% if current_user.is_authenticated %}
+                                                    <table>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td style="vertical-align: top">问题：</td>
+                                                            <td><a id="set_check">
+                                                                <img class="question-img"
+                                                                     src="{{ url_for('set_check') }}"
+                                                                     onclick="this.src='/set_check?d='+Math.random();"></a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr class="answer">
+                                                            <td>答案：</td>
+                                                            <td><input class="answer-input" type="text"></td>
+                                                        </tr>
+                                                        <tr style="margin-top:15px">
+                                                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                                            <td><a href="#" class="J_MsSubmit submit">立即秒杀</a></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                {% else %}
+                                                    <p class="need-login">请<a class="tb-ms-login" href="javascript:;">登录</a>后参加该秒杀活动！
+                                                    </p>
+                                                {% endif %}
+                                            </div>
+                                        {% else %}
+                                            <div class="tb-sk-btns end-seckill">
+                                                <a id="end-seckill" href="#" class="sk-button">秒杀结束</a>
+                                            </div>
+                                        {% endif %}
+                                    {% else %}
+                                        <div id="J_SecKillready" class="sec-kill">
+                                            <div class="tb-sec-kill-upper" data-spm="seckill">
+                                                <div class="gap">
+                                                    <div class="tb-sec-kill-time">
+                                                        <span class="text">开始时间:</span>
+                                                        <span class="date"
+                                                              begin-date="{{ product_detail.startdatetime }}">{{ product_detail.startdatetime }}</span>
+                                                        <span class="time"
+                                                              end-date="{{ product_detail.startdatetime }}"></span>
+                                                    </div>
+                                                    <div class="tb-sk-btns">
+                                                        <a id="sk-button" href="#" class="sk-button">即将开始</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                            {% if not current_user.is_authenticated %}
+                                                <p>秒杀订单直接使用默认<a href="" target="_blank" class="address">收货地址</a>，请提前设置正确。
+                                                </p>
+                                                <p class="need-login">请<a class="tb-ms-login" href="">登录</a>后参加该秒杀活动！
+                                                </p>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tb-sidebar tb-clear">
+                <div id="J_ShopInfo" class="tb-shop-info tb-shop-info-gold-border"
+                     style="border-color: rgb(232, 232, 232);">
+                    <a class="J_ShopInfoHeader tb-shop-info-bg" href="/" target="_blank">
+                        <img src="/static/images/supply.png" width="198"></a>
+                    <div class="tb-shop-info-wrap">
+                        <div class="tb-shop-info-hd">
+                            <div class="tb-shop-name">
+                                <dl>
+                                    <dd>
+                                        <strong>
+                                            <a href="" title="" target="_blank">
+                                                可锐
+                                            </a>
+                                        </strong>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="tb-shop-seller">
+                                <dl>
+                                    <dt>掌柜：</dt>
+                                    <dd>
+                                        <a class="tb-seller-name" href="" target="_blank" title="">
+                                            可锐旗舰店
+                                        </a>
+                                    </dd>
+                                </dl>
+                            </div>
+                            <div class="tb-shop-ww">
+                                <dl>
+                                    <dt>联系：</dt>
+                                    <dd>
+                                        <span class="ww-light ww-large"><span></span></span>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="tb-shop-info-ft">
+                            <a href="" target="_blank" data-spm="d21">进入店铺</a>
+                            <a class="J_TDialogTrigger J_TokenSign" href="">收藏店铺</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="J_TabBarWrap" class="tb-tabbar-wrap tb-clear">
+
+        <div class="tb-tabbar-mid-wrap tb-clear">
+            <div class="tb-tabbar-inner-wrap">
+                <ul id="J_TabBar" class="tb-tabbar tb-clear">
+                    <li class="tb-first">
+                        <a class="tb-tab-anchor" id="tab0" href="javascript:void(0);" data-id="0">宝贝详情</a>
+                    </li>
+                    <li>
+                        <a class="tb-tab-anchor" id="tab1" href="javascript:void(0);" data-id="1">
+                            累计评论
+                            <em class="J_ReviewsCount" style="display: none;">0</em>
+                        </a>
+                    </li>
+                    <li class="tb-shop-cart">
+                        <a id="J_TabShopCart" class="tb-tab-anchor" href="javascript:void(0);" data-index="3">
+                            <i class="tb-iconfont">Ů</i> 加入购物车</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="layout grid-s5m0 tb-main-layout">
+        <div class="main-wrap  J_TRegion" id="J_MainWrap" style="width: 950px;">
+            <div class="sub-wrap" id="J_SubWrap">
+                <div id="description" class="J_DetailSection tshop-psm ke-post" style="display: block">
+                    <div id="J_DivItemDesc" class="content">
+                        {{ product_detail.desc|safe }}
+                    </div>
+                </div>
+                <div id="reviews" style="display: none">
+                    <div class="kg-rate">
+                        <div class="tb-revbd">
+                            <div class="kg-loading">
+                                <span class="J_KgLoading_Message message failed">对不起，没有找到结果。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tb-price-spec">
+            <h3 class="spec-title">价格说明</h3>
+            <p class="title">划线价格</p>
+            <p class="info">指商品的专柜价、吊牌价、正品零售价、厂商指导价或该商品的曾经展示过的销售价等，<strong>并非原价</strong>，仅供参考。</p>
+            <p class="title">未划线价格</p>
+            <p class="info">指商品的<strong>实时标价</strong>，不因表述的差异改变性质。具体成交价格根据商品参加活动，或会员使用优惠券、积分等发生变化，最终以订单结算页价格为准。</p>
+            <p class="info">此说明仅当出现价格比较时有效，具体请参见《商家价格发布规范》。若商家单独对划线价格进行说明的，以商家的表述为准。</p>
+        </div>
+        <div class="correlative-items J_TAjaxContainer">
+            <div class="correlative-items" id="detail-recommend-linjiahaohuo" data-spm=""></div>
+            <div class="J_AsyncDC" data-type="dr">
+                <div id="official-remind">
+                    <dl class="tb-security">
+                        <dt>安全提示：</dt>
+                        <dd>
+
+                        </dd>
+                    </dl>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        //刷新库存标识
+        var isgetstock = true;
+        var csrftoken = $('meta[name=csrf-token]').attr('content')
+        $(function () {//文档加载完初始化倒计时
+            $(".time").countdown();
+        })
+        $(".J_MsSubmit").bind('click', function () {
+            var answer = $('.answer-input').val();
+            var amount = $('#J_IptAmount').val();
+            var product_id = $('#product_id').val();
+            var saleprice = $('#saleprice').data('price');
+            var myDate = new Date();
+
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: "/secaddcart",
+                cache: false, //不允许有缓存
+                data: {
+                    'product_id': product_id,
+                    'answer': answer,
+                    'amount': amount,
+                    'posttime': myDate,
+                },
+                success: function (data) {
+                    //alert(data.msg);
+                    if (data.status == 200) {
+                        url = '/paychoice/?order_id=' + data.orderid;
+                        window.location.href = url;
+                    } else {
+                        alert(data.msg);
+                        window.location.reload();
+                    }
+
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest);
+                    alert(errorThrown);
+                },
+            });
+
+        });
+
+        //如开始秒杀，则要刷新库存
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        // &&且 ||或
+        $.ajaxSetup({
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+        if ($(".J_MsSubmit").length > 0) {
+
+
+            var intervalstock = window.setInterval(function fnGetstock() {
+                var product_id = $('#product_id').val();
+                var var_data = {
+                    'product_id': product_id,
+                }
+                var json_str = JSON.stringify(var_data);
+                $.ajax({
+                    type: "post",
+                    url: "/getstock",
+                    data: json_str,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (data) {
+                        //alert(data.msg);
+                        if (data.hasstockqty) {
+                            $('#stockqty').text(data.stock_qty);
+                        } else {
+                            //没库存，提示秒杀结束
+                            $('#stockqty').text(0);
+                            $('#J_IptAmount').attr("value", '0');
+                            $('#J_SecKill').css('display', 'none');
+                            $('.end-seckill').css('display', 'block');
+                            window.clearInterval(intervalstock);
+                        }
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert(XMLHttpRequest);
+                        alert(errorThrown);
+                    },
+                });
+            }, 2000);
+        }
+        ;
+
+        $(".tb-tab-anchor").bind('click', function () {
+            var id = $(this).attr('data-id');
+            if (id == '0') {
+                $('#description').css('display', 'block');
+                $('.tb-tab-anchor').removeClass('selected');
+                $('#tab0').addClass('selected');
+                $('#reviews').css('display', 'none');
+            } else {
+                $('#reviews').css('display', 'block');
+                $('.tb-tab-anchor').removeClass('selected');
+                $('#tab1').addClass('selected');
+                $('#description').css('display', 'none');
+
+            }
+        });
+
+    </script>
+
+
+{% endblock %}

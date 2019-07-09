@@ -1,0 +1,27 @@
+<%! from django.utils.translation import ugettext as _ %>
+<%!
+  from django.core.urlresolvers import reverse
+  from courseware.courses import find_course_image_url
+  from django.conf import settings
+  from edxmako.shortcuts import marketing_link
+%>
+<%namespace name='static' file='../static_content.html'/>
+<%! from microsite_configuration import microsite %>
+
+<%inherit file="../mainpage.html" />
+<link href="/static/css/shoppingorder/paystyle.css" rel="stylesheet" type="text/css" />
+
+
+<div style="text-align: center;">
+    <p style="font-size:30px;padding: 20px;">${buy_title}</p>
+
+    <hr style="border: 1px solid #f67b31;">
+    <p style="color: #f67b31;font-size:30px;">￥${pay_amount}</p>
+    <hr style="border: 1px solid #f67b31;">
+    <p style="font-size:18px;">可锐职场</p>
+    <p style="font-size:18px;">可锐订单：${order_id}</p>
+    <input type="hidden" id="oid" name="oid" value="${order_id}"/>
+    <hr style="border: 1px solid #f67b31;">
+    ${payhtml}
+
+</div>
